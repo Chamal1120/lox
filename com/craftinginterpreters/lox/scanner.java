@@ -14,8 +14,34 @@ class Scanner {
   private int current = 0;
   private int line = 1;
 
+  private static final Map<String, TokenType> keywords;
+
+  static {
+    keywords = new HashMap<>();
+    keywords.put("and", AND);
+    keywords.put("class", CLASS);
+    keywords.put("else", ELSE);
+    keywords.put("false", FALSE);
+    keywords.put("for", FOR);
+    keywords.put("fun", FUN);
+    keywords.put("if", IF);
+    keywords.put("nil", NIL);
+    keywords.put("or", OR);
+    keywords.put("print", PRINT);
+    keywords.put("return", RETURN);
+    keywords.put("super", SUPER);
+    keywords.put("this", THIS);
+    keywords.put("true", TRUE);
+    keywords.put("var", VAR);
+    keywords.put("while", WHILE);
+  }
+
   Scanner(String source) {
     this.source = source;
+  }
+
+  private void addToken(TokenType type) {
+    addToken(type, null);
   }
 
   List<Token> scanTokens() {
@@ -25,6 +51,7 @@ class Scanner {
       scanToken();
     }
     tokens.add(new Token(EOF, "", null, line));
+    return tokens;
   }
 
   private void scanToken () {
@@ -44,13 +71,13 @@ class Scanner {
         addToken(match('=') ? BANG_EQUAL : BANG);
         break;
       case '=':
-        addToken(match('=') ? EQUAL_EQUAL, : EQUAL);
+        addToken(match('=') ? EQUAL_EQUAL : EQUAL);
         break;
       case '<':
-        addToken(match('=') ? LESS_EQUAL, : LESS);
+        addToken(match('=') ? LESS_EQUAL : LESS);
         break;
       case '>':
-        addToken(match('=') ? GREATER_EQUAL, : GREATER);
+        addToken(match('=') ? GREATER_EQUAL : GREATER);
         break;
       case '/':
         if (match('/')) {
@@ -70,9 +97,16 @@ class Scanner {
         break;
       case '"': string(); break;
       default:
+        // Check whether  the char is  a digit
         if (isDigit(c)) {
+          // Consume if the lexme as a number
           number();
+        // Check whether the char is a valid char for an identifier
+        } else if (isAlpha(c)) {
+          // Consume as an identifier
+          identifier();
         } else {
+         // Log a Lox error
           Lox.error(line, "Unexpected character.");
         }
         break;
@@ -80,6 +114,26 @@ class Scanner {
   }
   
   //******************* Helper functions **************************************
+
+  private void identifier() {
+    while (isAlphaNumeric(peek())) advance();
+   
+    String text = source.substring(start,  current);
+    TokenType type = keywords.get(text);
+    if (type == null) type = IDENTIFIER;
+    addToken(type);
+  }
+
+  private boolean isAlpha(char c) {
+    return (c >= 'a' && c <= 'z') ||
+           (c >= 'A' && c <= 'Z') ||
+            c == '_';
+    
+  }
+
+  private boolean isAlphaNumeric(char c) {
+   return isAlpha(c) || isDigit(c);
+  }
 
   private void number() {
     while (isDigit(peek())) advance();
@@ -125,12 +179,12 @@ class Scanner {
     return true;
   }
 
-  private Char peek() {
+  private char peek() {
     if (isAtEnd()) return '\0';
     return source.charAt(current);
   }
 
-  private Char peekNext() {
+  private char peekNext() {
     if (current + 1 >= source.length()) return '\0';
     return source.charAt(current + 1);
   }

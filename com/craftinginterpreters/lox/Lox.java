@@ -43,7 +43,7 @@ public class Lox {
     // Loop the REPL
     for (;;) {
       System.out.print("> ");
-      String line = reader.readline();
+      String line = reader.readLine();
       if (line == null) break;
       run(line);
       hadError = false;
