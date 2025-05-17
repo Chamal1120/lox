@@ -8,11 +8,11 @@
 
 ## TODO
 
-[x] main function that runs the REPL and Compiler
-[x] Data Structure for the lexemes (Token and TokenType enum)
-[x] scanner
-[] parser
-[] compiler
+* [x] main function that runs the REPL and Compiler
+* [x] Data Structure for the lexemes (Token and TokenType enum)
+* [x] scanner
+* [] parser
+* [] compiler
 
 > [!NOTE]
 > Things might change here coz I'm still following this book.
