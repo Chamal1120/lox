@@ -1,2 +1,9 @@
 test.lox
+output.txt
 /out
+target/
+.idea/
+.classpath
+.project
+.settings/
+.vscode/

@@ -45,13 +45,15 @@ print c;
 print d;
 ```
 
-2. Compile using the given script:
+3. Make sure you have [Apache Maven](https://maven.apache.org/install.html) available on your `PATH`.
+
+4. Compile using the given script (wraps `mvn clean compile`):
 
 ```bash
 ./compile.sh
 ```
 
-3. Run using the given script:
+5. Run using the given script (re-compiles and launches the AST printer for now):
 
 ```bash
 ./run.sh

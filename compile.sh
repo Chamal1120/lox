@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Compile
-javac -d out com/craftinginterpreters/lox/*.java
+mvn -q clean compile
